@@ -10,23 +10,42 @@ Sub PrepareNewGame()
     If FilesOperations.IsFileExists(Settings.FilePathName) Then
         FilesOperations.LoadOfferFile
         'MsgBox "Start Word: " & Settings.GetStartWord & ", Player 1: " & Settings.GetPlayer1Name & ", Player 2: " & Settings.GetPlayer2Name
-        AskNewGameData
+        AskNewGameData ' ask only player name
         SSOperations.PutNewGameInfo
     Else
-        'form_NewGame.Show ' ask the player name and the start word
-        AskNewGameData
-        FilesOperations.CreateOfferFile
+        AskNewGameData ' ask the player name and the start word
+        If IsGameByPlayer1Created Then
+            FilesOperations.CreateOfferFile
+        End If
     End If
     ' uninterrupted checking of the file changes: Do ... While two players connection was not established
 End Sub
 
 Sub AskNewGameData()
     ' If the player 1 name is not set -> show window for asking it
-    If Settings.GetStartWord = "" And Settings.GetPlayer1Name = "" Then
+    If IsGameNobodyCreated Then
+        form_NewGame.lbl_Title = "Создание новой"
+        form_NewGame.lbl_StartWord = "Введите начальное слово:"
         form_NewGame.tb_StartWord.Locked = False
-    ElseIf Settings.GetStartWord <> "" And Settings.GetPlayer1Name = "" Then
+    ElseIf IsGameByPlayer2Created Then
+        form_NewGame.lbl_Title = "Подключение к существующей"
+        form_NewGame.lbl_StartWord = "Начальное слово:"
         form_NewGame.tb_StartWord.Text = Settings.GetStartWord
         form_NewGame.tb_StartWord.Locked = True
     End If
     form_NewGame.Show ' open dialog
 End Sub
+
+' Status application getters
+Function IsGameByPlayer1Created() As Boolean
+    IsGameByPlayer1Created = (Settings.GetStartWord <> "" And Settings.GetPlayer1Name <> "" And Settings.GetPlayer2Name = "")
+End Function
+
+Function IsGameByPlayer2Created() As Boolean
+    IsGameByPlayer2Created = (Settings.GetStartWord <> "" And Settings.GetPlayer1Name = "" And Settings.GetPlayer2Name <> "")
+End Function
+
+Function IsGameNobodyCreated() As Boolean
+    IsGameNobodyCreated = (Settings.GetStartWord = "" And Settings.GetPlayer1Name = "" And Settings.GetPlayer2Name = "")
+End Function
+

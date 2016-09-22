@@ -27,18 +27,18 @@ Sub LoadOfferFile()
     Loop
     Close #1
     
-    Settings.SetStartWord (StrAfterSep(FileData(1), Settings.GetSep_MaskData))
+    Settings.SetStartWord (GetParam(FileData(1), Settings.GetSep_MaskData))
     ' if file was created by a some player 2, then 2-th line in the file is its name, 3-th - player 1 name
-    Settings.SetPlayer2Name (StrAfterSep(FileData(2), Settings.GetSep_MaskData))
-    Settings.SetPlayer1Name (StrAfterSep(FileData(3), Settings.GetSep_MaskData))
+    Settings.SetPlayer2Name (GetParam(FileData(2), Settings.GetSep_MaskData))
+    Settings.SetPlayer1Name (GetParam(FileData(3), Settings.GetSep_MaskData))
 End Sub
 
-Function StrAfterSep(Str$, Sep$) As String
+Function GetParam(Str$, Sep$) As String
 ' Return string that is part of initial Str from first occurence the Sep to the Str end
     If Str = "" Then
-        StrAfterSep = ""
+        GetParam = ""
     Else
-        StrAfterSep = Mid(Str, InStr(Str, Sep) + 1)
+        GetParam = Mid(Str, InStr(Str, Sep) + 1)
     End If
 End Function
 
