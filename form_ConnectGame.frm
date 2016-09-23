@@ -13,14 +13,13 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Private Sub cmd_Cancel_Click()
-    Call Settings.SetPlayer1Name(form_CreateGame.tb_Player1Name.Text)
-    form_ConnectGame.Hide
-'    ClearTextBoxes
-End Sub
-
 Private Sub cmd_Ok_Click()
+    Call Settings.SetPlayer1Name(form_ConnectGame.tb_Player1Name.Text)
     form_ConnectGame.Hide
 '    ClearTextBoxes
 End Sub
 
+Private Sub cmd_Cancel_Click()
+    form_ConnectGame.Hide
+'    ClearTextBoxes
+End Sub

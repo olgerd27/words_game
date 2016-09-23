@@ -44,13 +44,14 @@ Function GetParam(Str$, Sep$) As String
 End Function
 
 Sub OutPlayer1Name()
-    Dim StrLine As String
-
-    Open Settings.FilePathName For Random As #1
-    Get #1, 1, StrLine
-    Settings.SetPlayer1Name (StrLine)
+    Dim Data As String * 100, PosMask#, PosSep#
+    Open Settings.FilePathName For Binary As #1 Len = Len(Data)
+    Get #1, , Data
+    PosMask = InStr(Data, Settings.GetPlayer2Name_Mask)
+    PosSep = InStr(PosMask, Data, Settings.GetSep_MaskData)
+    Seek #1, PosSep + 1
+    Put #1, , Settings.GetPlayer1Name
     Close #1
-    MsgBox "OutPl: " & Settings.GetPlayer1Name
 End Sub
 
 Sub RemoveFile()
