@@ -18,12 +18,13 @@ End Sub
 
 Sub LoadOfferFile()
     Dim FileData(1 To 3) As String
+    Dim I As Integer
+    
     Open Settings.FilePathName For Input As #1
-    i = 1
+    I = 1
     Do While Not EOF(1)
-        Line Input #1, FileData(i)
-        Debug.Print FileData(i)
-        i = i + 1
+        Line Input #1, FileData(I)
+        I = I + 1
     Loop
     Close #1
     
@@ -42,10 +43,14 @@ Function GetParam(Str$, Sep$) As String
     End If
 End Function
 
-Sub OutPlayer1Name(Name$)
-    Open Settings.FilePathName For Output As #1
-    Print #1, Name
+Sub OutPlayer1Name()
+    Dim StrLine As String
+
+    Open Settings.FilePathName For Random As #1
+    Get #1, 1, StrLine
+    Settings.SetPlayer1Name (StrLine)
     Close #1
+    MsgBox "OutPl: " & Settings.GetPlayer1Name
 End Sub
 
 Sub RemoveFile()

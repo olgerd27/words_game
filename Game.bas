@@ -10,30 +10,23 @@ Sub PrepareNewGame()
     If FilesOperations.IsFileExists(Settings.FilePathName) Then
         FilesOperations.LoadOfferFile
         'MsgBox "Start Word: " & Settings.GetStartWord & ", Player 1: " & Settings.GetPlayer1Name & ", Player 2: " & Settings.GetPlayer2Name
-        AskNewGameData ' ask only player name
+        ShowCreatedGameDialog ' open connect dialog for showing created game info and asking player 1 name
+        FilesOperations.OutPlayer1Name
         SSOperations.PutNewGameInfo
     Else
-        AskNewGameData ' ask the player name and the start word
+        form_CreateGame.Show ' open create new dialog for asking the player name and the start word
         If IsGameByPlayer1Created Then
             FilesOperations.CreateOfferFile
+            SSOperations.PutNewGameInfo
         End If
     End If
     ' uninterrupted checking of the file changes: Do ... While two players connection was not established
 End Sub
 
-Sub AskNewGameData()
-    ' If the player 1 name is not set -> show window for asking it
-    If IsGameNobodyCreated Then
-        form_NewGame.lbl_Title = "Создание новой"
-        form_NewGame.lbl_StartWord = "Введите начальное слово:"
-        form_NewGame.tb_StartWord.Locked = False
-    ElseIf IsGameByPlayer2Created Then
-        form_NewGame.lbl_Title = "Подключение к существующей"
-        form_NewGame.lbl_StartWord = "Начальное слово:"
-        form_NewGame.tb_StartWord.Text = Settings.GetStartWord
-        form_NewGame.tb_StartWord.Locked = True
-    End If
-    form_NewGame.Show ' open dialog
+Sub ShowCreatedGameDialog()
+    form_ConnectGame.tb_StartWord.Text = Settings.GetStartWord
+    form_ConnectGame.tb_Player2Name = Settings.GetPlayer2Name
+    form_ConnectGame.Show
 End Sub
 
 ' Status application getters
